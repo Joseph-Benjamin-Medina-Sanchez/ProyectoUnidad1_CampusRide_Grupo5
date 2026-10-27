@@ -1,0 +1,22 @@
+﻿name: CI CampusRide - Grupo 5
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  validate-structure:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 1. Checkout del repositorio
+        uses: actions/checkout@v4
+
+      - name: 2. Validar directorios obligatorios
+        run: |
+          test -d frontend
+          test -d backend
+          test -d docs
+          test -f README.md
+          echo "Estructura de directorios verificada correctamente"
