@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CampusRide ESPE - Registro Institucional</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <script type="text/javascript" src="https://gc.kis.v2.scr.kaspersky-labs.com/FD126C42-EBFA-4E12-B309-BB3FDD723AC1/main.js?attr=2Gf_8Dp73nGkBLYkEFSNDzdgInMOo8Hc5gMB9BbUgTKzKF_SLLEwSxiBkFXuMyATZQ51lJFefWyl7mGijw-kufpqFnb9MWrsurhLX1BZUVVA2nyiZaKvfrX83Co1teKZEcBXlMgwiA6TJp0421sbBTanAPFPnAMMEgr8OzMTBXpSzrRD1YfD5xilphpYrSC-uYUsqGAU9DGZ40j4UrPkJQ3S0PyRKYGA3YaK3WOZm5E7NUPQBkUepfeJPR5HYt_McXaq67vyPAjWZnrT3MPgODBa4pYBIa8hcZMLJKWFf16fbrOXUq5-BjIpuwnRcE-rO7wjFEHM7FnMAjS7UH7B-g" charset="UTF-8"></script><link rel="stylesheet" crossorigin="anonymous" href="https://gc.kis.v2.scr.kaspersky-labs.com/E3E8934C-235A-4B0E-825A-35A08381A191/abn/main.css?attr=aHR0cHM6Ly9jb250cmlidXRpb24udXNlcmNvbnRlbnQuZ29vZ2xlLmNvbS9kb3dubG9hZD9jPUNneGlZWEprWDNOMGIzSmhaMlVTVUJJTmNtVnpjRzl1YzJWZlpHRjBZUm9fQ2pCaE5XRmtZV1V3T0RrMlpUVmhaREUxTURBd05qVmxZemd3WVdVNFl6QXhOREF4TXpBMlpHSTFaV0V6T0RKaU1qQVNDeElIRU1tZThiV3pGaGdCJmZpbGVuYW1lPXJlZ2lzdHJvX2luc3RpdHVjaW9uYWwuaHRtbCZvcGk9MTAzMTM1MDUw"/><style>
+        :root {
+            --primary-green: #0b5c36;
+            --primary-hover: #084226;
+            --light-green: #e9f2ee;
+            --bg-color: #f8f9fa;
+            --text-main: #1a1a1a;
+            --text-muted: #666666;
+            --border-color: #e5e7eb;
+            --card-bg: #ffffff;
+            --error-text: #dc2626;
+            --error-border: #f87171;
+            --error-bg: #fef2f2;
+        }
+        * { margin: 0; padding: 0; box-sizing: border-box; font-family: 'Inter', sans-serif; }
+        body { background-color: var(--bg-color); color: var(--text-main); display: flex; flex-direction: column; min-height: 100vh; }
+        
+        /* Top Navigation */
+        .top-nav { background-color: var(--card-bg); padding: 16px 48px; border-bottom: 1px solid var(--border-color); display: flex; justify-content: space-between; align-items: center; }
+        .logo-container { display: flex; align-items: center; gap: 12px; }
+        .logo-icon { width: 32px; height: 32px; background-color: var(--primary-green); color: white; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 14px; }
+        .logo-text h1 { font-size: 16px; font-weight: 700; color: var(--primary-green); }
+        .logo-text span { font-size: 12px; color: var(--text-muted); }
+        .help-link { color: var(--text-muted); font-size: 14px; font-weight: 500; text-decoration: none; }
+        
+        /* Main Layout */
+        .main-container { padding: 48px; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; max-width: 1200px; margin: 0 auto; align-items: start; }
+        
+        .header-area { grid-column: 1 / -1; margin-bottom: -24px; }
+        .breadcrumb { font-size: 13px; color: var(--text-muted); margin-bottom: 8px; }
+        .page-title { font-size: 32px; font-weight: 700; margin-bottom: 8px; }
+        .page-subtitle { font-size: 15px; color: var(--text-muted); }
+
+        /* Left Column - Marketing */
+        .marketing-card { border-radius: 16px; overflow: hidden; display: flex; flex-direction: column; }
+        .marketing-img { width: 100%; height: 240px; object-fit: cover; }
+        .marketing-content { background-color: var(--primary-green); color: white; padding: 40px; flex: 1; }
+        .marketing-badge { display: inline-flex; align-items: center; gap: 8px; font-size: 11px; text-transform: uppercase; font-weight: 600; letter-spacing: 0.5px; margin-bottom: 16px; opacity: 0.9; }
+        .marketing-content h2 { font-size: 28px; font-weight: 700; margin-bottom: 16px; line-height: 1.2; }
+        .marketing-content p { font-size: 14px; opacity: 0.9; margin-bottom: 24px; line-height: 1.5; }
+        .feature-list { display: flex; flex-direction: column; gap: 12px; margin-bottom: 32px; }
+        .feature-item { display: flex; align-items: center; gap: 12px; font-size: 13px; font-weight: 500; }
+        .feature-item i { opacity: 0.8; }
+        .marketing-footer { font-size: 11px; opacity: 0.7; }
+
+        /* Right Column - Form */
+        .form-card { background-color: var(--card-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 40px; }
+        .form-status { font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing: 0.5px; margin-bottom: 12px; }
+        .status-error { color: var(--error-text); display: none; }
+        .form-title { font-size: 20px; font-weight: 700; margin-bottom: 24px; }
+        
+        .input-group { display: flex; flex-direction: column; gap: 8px; margin-bottom: 20px; }
+        .input-group label { font-size: 13px; font-weight: 600; color: var(--text-main); }
+        .input-wrapper { position: relative; display: flex; align-items: center; }
+        .input-wrapper input { width: 100%; padding: 12px 16px; border: 1px solid var(--border-color); border-radius: 8px; font-size: 14px; outline: none; transition: all 0.2s; }
+        .input-wrapper input:focus { border-color: var(--primary-green); }
+        
+        /* Error States for Inputs */
+        .input-group.has-error input { border-color: var(--error-border); background-color: var(--error-bg); color: var(--error-text); }
+        .input-group.has-error .error-icon { display: block; }
+        .error-icon { display: none; position: absolute; right: 16px; color: var(--error-text); }
+        .error-message { display: none; font-size: 12px; color: var(--error-text); margin-top: 4px; }
+        .input-group.has-error .error-message { display: block; }
+        
+        .password-wrapper i { position: absolute; left: 16px; color: var(--text-muted); }
+        .password-wrapper input { padding-left: 40px; }
+        .helper-text { font-size: 11px; color: var(--text-muted); margin-top: -12px; margin-bottom: 24px; display: block; }
+
+        /* Role Toggle */
+        .role-label { font-size: 13px; font-weight: 600; margin-bottom: 12px; display: block; }
+        .role-toggle { display: flex; background-color: var(--bg-color); border: 1px solid var(--border-color); border-radius: 8px; overflow: hidden; margin-bottom: 24px; }
+        .role-option { flex: 1; text-align: center; padding: 12px; font-size: 14px; font-weight: 500; cursor: pointer; color: var(--text-muted); transition: all 0.2s; display: flex; align-items: center; justify-content: center; gap: 8px; }
+        .role-option.active { background-color: var(--primary-green); color: white; font-weight: 600; }
+
+        .checkbox-group { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 24px; }
+        .checkbox-group input { margin-top: 3px; accent-color: var(--primary-green); width: 16px; height: 16px; }
+        .checkbox-group label { font-size: 12px; color: var(--text-muted); line-height: 1.5; }
+
+        .btn-primary { width: 100%; background-color: var(--primary-green); color: white; border: none; padding: 14px; border-radius: 8px; font-size: 15px; font-weight: 600; cursor: pointer; display: flex; justify-content: center; align-items: center; gap: 8px; transition: background-color 0.2s; }
+        .btn-primary:hover { background-color: var(--primary-hover); }
+    </style>
+</head>
+<body>
+    <nav class="top-nav">
+        <div class="logo-container">
+            <div class="logo-icon"><i class="fa-solid fa-car"></i></div>
+            <div class="logo-text"><h1>CampusRide ESPE</h1><span>Grupo 5 - ESPE University</span></div>
+        </div>
+        <a href="#" class="help-link">¿Necesitas ayuda?</a>
+    </nav>
+
+    <main class="main-container">
+        <div class="header-area">
+            <div class="breadcrumb">Bienvenida / Crear cuenta</div>
+            <h2 class="page-title">Tu campus empieza en el camino.</h2>
+            <p class="page-subtitle">Crea tu cuenta institucional y comparte el trayecto con la comunidad ESPE.</p>
+        </div>
+
+        <!-- Left Column -->
+        <div class="marketing-card">
+            <!-- Usando una imagen genérica representativa de un campus/naturaleza para simular el diseño -->
+            <img src="https://images.unsplash.com/photo-1541339907198-e08756dedf3f?auto=format&fit=crop&w=800&q=80" alt="Campus ESPE" class="marketing-img">
+            <div class="marketing-content">
+                <div class="marketing-badge"><i class="fa-solid fa-leaf"></i> MENOS AUTOS. MÁS COMUNIDAD.</div>
+                <h2>Un mismo destino. Un mejor trayecto.</h2>
+                <p>Encuentra viajes hacia el campus, comparte los gastos y llega acompañado de personas de tu universidad.</p>
+                <div class="feature-list">
+                    <div class="feature-item"><i class="fa-regular fa-circle-check"></i> Acceso con correo @espe.edu.ec</div>
+                    <div class="feature-item"><i class="fa-solid fa-route"></i> Rutas pensadas para tu campus</div>
+                    <div class="feature-item"><i class="fa-regular fa-user"></i> Tú eliges cómo compartir</div>
+                </div>
+                <div class="marketing-footer">Grupo 5 - ESPE University: Movilidad universitaria, de persona a persona.</div>
+            </div>
+        </div>
+
+        <!-- Right Column - Formulario HU-01 -->
+        <div class="form-card">
+            <div class="form-status status-error" id="error-header">ERROR · CORREO NO INSTITUCIONAL</div>
+            <h3 class="form-title" id="form-title">Crea tu cuenta</h3>
+
+            <div class="input-group">
+                <label>Nombre completo *</label>
+                <div class="input-wrapper">
+                    <input type="text" id="nombre" value="Sofía López">
+                </div>
+            </div>
+
+            <div class="input-group" id="email-group">
+                <label>Correo institucional *</label>
+                <div class="input-wrapper">
+                    <input type="email" id="correo" value="sofia.lopez@gmail.com" placeholder="ejemplo@espe.edu.ec">
+                    <i class="fa-solid fa-circle-exclamation error-icon"></i>
+                </div>
+                <span class="error-message">Debe utilizar un correo institucional válido (@espe.edu.ec)</span>
+            </div>
+
+            <div class="input-group">
+                <label>Contraseña *</label>
+                <div class="input-wrapper password-wrapper">
+                    <i class="fa-solid fa-lock"></i>
+                    <input type="password" id="password" value="********">
+                </div>
+            </div>
+            <span class="helper-text">Usa al menos 8 caracteres, una mayúscula y un número.</span>
+
+            <span class="role-label">¿Cómo quieres viajar?</span>
+            <div class="role-toggle">
+                <div class="role-option" id="role-conductor" onclick="selectRole('conductor')"><i class="fa-solid fa-car"></i> Conductor</div>
+                <div class="role-option active" id="role-pasajero" onclick="selectRole('pasajero')"><i class="fa-solid fa-user"></i> Pasajero</div>
+            </div>
+
+            <div class="checkbox-group">
+                <input type="checkbox" id="terms" checked>
+                <label>Acepto los términos de uso y el aviso de privacidad de CampusRide.</label>
+            </div>
+
+            <button class="btn-primary" onclick="validarRegistro()">
+                <i class="fa-solid fa-arrow-right"></i> Registrarse
+            </button>
+        </div>
+    </main>
+
+    <script>
+        // Manejo visual del selector de rol
+        let currentRole = 'pasajero';
+        
+        function selectRole(role) {
+            currentRole = role;
+            document.getElementById('role-conductor').classList.remove('active');
+            document.getElementById('role-pasajero').classList.remove('active');
+            document.getElementById('role-' + role).classList.add('active');
+        }
+
+        // Lógica de validación (HU-01 / TEST-01 y TEST-02)
+        function validarRegistro() {
+            const emailInput = document.getElementById('correo').value.toLowerCase();
+            const emailGroup = document.getElementById('email-group');
+            const errorHeader = document.getElementById('error-header');
+            const formTitle = document.getElementById('form-title');
+
+            // Criterio de Aceptación CA-01.2: Rechazo de correo no institucional
+            if (!emailInput.endsWith('@espe.edu.ec')) {
+                emailGroup.classList.add('has-error');
+                errorHeader.style.display = 'block';
+                formTitle.innerText = 'Revisa tu correo';
+            } 
+            // Criterio de Aceptación CA-01.1: Registro exitoso
+            else {
+                emailGroup.classList.remove('has-error');
+                errorHeader.style.display = 'none';
+                formTitle.innerText = 'Registro exitoso';
+                
+                alert('¡Registro exitoso! Redirigiendo al dashboard...');
+                
+                // CRUCE DE PANTALLAS: Redirección según el rol seleccionado
+                if(currentRole === 'pasajero') {
+                    window.location.href = 'dashboard_pasajero_campusride.html';
+                } else {
+                    window.location.href = 'publicar_viaje_conductor.html';
+                }
+            }
+        }
+    </script>
+</body>
+</html>
