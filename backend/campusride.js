@@ -18,4 +18,24 @@ class CampusRideSystem {
     this.users.push(newUser);
     return { message: 'Registro exitoso', user: newUser };
   }
+
+  publishRoute({ id, driverEmail, origin, destination, date, departureTime, availableSeats, isFutureTime = true, stops = [] }) {
+    if (availableSeats < 1 || availableSeats > 4 || !isFutureTime) {
+      throw new Error('Ingrese entre 1 y 4 cupos y un horario futuro');
+    }
+    const newTrip = {
+      id: id || `TRIP-10${this.trips.length + 1}`,
+      driverEmail,
+      origin,
+      destination,
+      date,
+      departureTime,
+      availableSeats,
+      status: 'Disponible', 
+      stops: stops.map((stopName, index) => ({ order: index + 1, name: stopName, passengers: [] })),
+      confirmedPassengers: []
+    };
+    this.trips.push(newTrip);
+    return newTrip;
+  }
 }
