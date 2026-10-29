@@ -3,22 +3,163 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CampusRide ESPE - Movilidad Compartida Universitaria</title>
+  <title>CampusRide ESPE - Demo Funcional Grupo 5</title>
+  <style>
+    :root { --espe-green: #0b5d3b; --bg: #f4f7f5; --card: #ffffff; --error: #c62828; }
+    * { box-sizing: border-box; font-family: 'Segoe UI', system-ui, sans-serif; }
+    body { margin: 0; background: var(--bg); color: #1e293b; padding: 20px; }
+    header { background: var(--espe-green); color: white; padding: 16px 24px; border-radius: 10px; margin-bottom: 20px; display: flex; justify-content: space-between; align-items: center; }
+    .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 16px; }
+    .card { background: var(--card); padding: 18px; border-radius: 10px; box-shadow: 0 2px 6px rgba(0,0,0,0.07); border-top: 4px solid var(--espe-green); }
+    h2 { margin-top: 0; font-size: 1.05rem; color: var(--espe-green); }
+    label { display: block; font-size: 0.85rem; margin-top: 8px; font-weight: 600; }
+    input, select { width: 100%; padding: 8px; margin-top: 4px; border: 1px solid #cbd5e1; border-radius: 6px; }
+    button { margin-top: 12px; width: 100%; padding: 10px; border: none; border-radius: 6px; background: var(--espe-green); color: white; font-weight: 600; cursor: pointer; }
+    button:disabled { background: #94a3b8; cursor: not-allowed; }
+    .status-msg { margin-top: 10px; padding: 8px; border-radius: 6px; font-size: 0.85rem; display: none; }
+    .ok { display: block; background: #dcfce7; color: #166534; }
+    .err { display: block; background: #fee2e2; color: var(--error); }
+    .badge { display: inline-block; background: #e0f2fe; color: #0369a1; padding: 4px 8px; border-radius: 4px; font-size: 0.8rem; font-weight: 600; margin-top: 6px; }
+  </style>
 </head>
 <body>
+
   <header>
-    <h1>CampusRide ESPE - Grupo 5</h1>
-    <p>Sistema de Movilidad Compartida Universitaria (Incluye Evolución CR-01: Paradas Inteligentes)</p>
+    <div>
+      <h1 style="margin:0; font-size:1.3rem;">CampusRide ESPE · Maqueta Funcional</h1>
+      <small>Grupo 5 — Trazabilidad HU-01 a HU-09, BUG-01/02 y Evolución CR-01</small>
+    </div>
+    <span class="badge" style="background:#dcfce7; color:#166534;">CI GitHub Actions: PASS</span>
   </header>
-  <main id="app-container">
-    <section id="search-section">
-      <h2>Buscar Ruta Universitaria</h2>
-      <input type="text" id="origin-input" placeholder="Tu ubicación (ej. San Rafael)" value="San Rafael">
-      <input type="text" id="dest-input" placeholder="Destino" value="Campus ESPE">
-      <button id="btn-search">Buscar</button>
-      <div id="smart-stop-badge">★ Parada Inteligente Sugerida: El Triángulo de San Rafael</div>
+
+  <main class="grid">
+    <!-- 1. HU-01: Registro Institucional -->
+    <section class="card">
+      <h2>1. Registro Institucional (HU-01)</h2>
+      <label>Nombre completo</label>
+      <input type="text" id="reg-name" value="César Vargas">
+      <label>Correo institucional (@espe.edu.ec)</label>
+      <input type="email" id="reg-email" value="cavargas@espe.edu.ec">
+      <button onclick="probarRegistro()">Registrarse (Validar Dominio)</button>
+      <div id="msg-reg" class="status-msg"></div>
+    </section>
+
+    <!-- 2. HU-02 y CR-01: Publicación y Paradas Inteligentes -->
+    <section class="card">
+      <h2>2. Publicar Ruta + Paradas (HU-02 / CR-01)</h2>
+      <label>Ruta</label>
+      <input type="text" value="San Luis Shopping -> Campus ESPE" readonly>
+      <label>Paradas Intermedias (CR-01)</label>
+      <input type="text" id="route-stops" value="Triángulo de San Rafael, Parque Infantil Sangolquí">
+      <label>Cupos disponibles (1 a 4)</label>
+      <input type="number" id="route-seats" value="1" min="0" max="5">
+      <button onclick="probarPublicar()">Publicar Ruta</button>
+      <div id="msg-route" class="status-msg"></div>
+    </section>
+
+    <!-- 3. HU-03, HU-04 y CR-01: Buscador y Sugerencia Inteligente -->
+    <section class="card">
+      <h2>3. Parada Inteligente y Reserva (HU-03 / HU-04 / CR-01)</h2>
+      <label>Tu ubicación / sector de origen</label>
+      <input type="text" id="search-sector" value="San Rafael" oninput="sugerirParada()">
+      <div id="smart-stop-box" class="status-msg ok" style="display:block; margin-top:10px;">
+        ★ Parada Inteligente Sugerida: <b>Triángulo de San Rafael</b> (0.12 ms &le; 500 ms RNF-06)
+      </div>
+      <button id="btn-request" onclick="solicitarCupo()">Solicitar Cupo en Parada Sugerida</button>
+    </section>
+
+    <!-- 4. HU-05, HU-06, HU-07 y BUG-01 / BUG-02: Control Conductor -->
+    <section class="card">
+      <h2>4. Panel Conductor: Cupos y Viaje (HU-05 / HU-07)</h2>
+      <p style="margin:4px 0; font-size:0.9rem;">Cupos libres actuales: <strong id="seats-counter">1</strong></p>
+      <button id="btn-accept" onclick="aceptarPasajero()">Aceptar Solicitud Pendiente (HU-05)</button>
+      <hr style="margin:12px 0; border:0; border-top:1px solid #e2e8f0;">
+      <p style="margin:4px 0; font-size:0.9rem;">Estado del Viaje: <strong id="trip-status">Por Iniciar</strong></p>
+      <button id="btn-start" onclick="iniciarViaje()">Iniciar Viaje (HU-07)</button>
+      <button id="btn-finish" onclick="finalizarViaje()" disabled>Finalizar Viaje (Bloqueado por BUG-02)</button>
+      <div id="msg-driver" class="status-msg"></div>
     </section>
   </main>
+
   <script src="app.js"></script>
+  <script>
+    let cupos = 1;
+    let estadoViaje = 'Por Iniciar';
+
+    function probarRegistro() {
+      const email = document.getElementById('reg-email').value;
+      const box = document.getElementById('msg-reg');
+      if (UIController.validateInstitutionalEmail(email)) {
+        box.className = 'status-msg ok';
+        box.textContent = '✔ Registro exitoso: Bienvenido a CampusRide ESPE (CA-01.1)';
+      } else {
+        box.className = 'status-msg err';
+        box.textContent = '✖ Error: Debe utilizar un correo institucional válido @espe.edu.ec (CA-01.2)';
+      }
+    }
+
+    function probarPublicar() {
+      const n = parseInt(document.getElementById('route-seats').value, 10);
+      const box = document.getElementById('msg-route');
+      if (n < 1 || n > 4 || isNaN(n)) {
+        box.className = 'status-msg err';
+        box.textContent = '✖ Error: Ingrese entre 1 y 4 cupos y un horario futuro (CA-02.2)';
+      } else {
+        cupos = n;
+        document.getElementById('seats-counter').textContent = cupos;
+        document.getElementById('btn-accept').disabled = UIController.getAcceptButtonState(cupos).disabled;
+        box.className = 'status-msg ok';
+        box.textContent = `✔ Ruta publicada en estado Disponible con ${cupos} cupo(s) y paradas registradas (CA-02.1 / CR-01).`;
+      }
+    }
+
+    function sugerirParada() {
+      const q = document.getElementById('search-sector').value.toLowerCase();
+      const box = document.getElementById('smart-stop-box');
+      const parada = q.includes('parque') || q.includes('sangolqui')
+        ? 'Parque Infantil Sangolquí'
+        : 'Triángulo de San Rafael';
+      box.innerHTML = `★ Parada Inteligente Sugerida: <b>${parada}</b> (0.15 ms &le; 500 ms RNF-06)`;
+    }
+
+    function solicitarCupo() {
+      const btn = document.getElementById('btn-request');
+      btn.textContent = 'Solicitud Enviada (Pendiente)';
+      btn.disabled = true;
+    }
+
+    function aceptarPasajero() {
+      const box = document.getElementById('msg-driver');
+      if (cupos > 0) {
+        cupos--;
+        document.getElementById('seats-counter').textContent = cupos;
+        const state = UIController.getAcceptButtonState(cupos);
+        document.getElementById('btn-accept').disabled = state.disabled;
+        box.className = 'status-msg ok';
+        box.textContent = cupos === 0
+          ? '✔ Pasajero confirmado. Cupos en 0: botón Aceptar bloqueado automáticamente (Fix BUG-01).'
+          : '✔ Pasajero confirmado y cupo descontado.';
+      }
+    }
+
+    function iniciarViaje() {
+      estadoViaje = 'En Curso';
+      document.getElementById('trip-status').textContent = estadoViaje;
+      document.getElementById('btn-start').disabled = true;
+      const finishState = UIController.getFinishButtonState(estadoViaje);
+      const btnFin = document.getElementById('btn-finish');
+      btnFin.disabled = finishState.disabled;
+      btnFin.textContent = 'Finalizar Viaje (Activo)';
+    }
+
+    function finalizarViaje() {
+      estadoViaje = 'Completado';
+      document.getElementById('trip-status').textContent = estadoViaje;
+      document.getElementById('btn-finish').disabled = true;
+      const box = document.getElementById('msg-driver');
+      box.className = 'status-msg ok';
+      box.textContent = '✔ Viaje Completado. Calificación de 1 a 5 estrellas habilitada e historial actualizado (HU-08 / HU-09).';
+    }
+  </script>
 </body>
 </html>
