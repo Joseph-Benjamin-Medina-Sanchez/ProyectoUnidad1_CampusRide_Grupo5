@@ -175,7 +175,7 @@ class CampusRideSystem {
       });
     return { message: 'OK', history };
   }
-  suggestSmartStop(tripId, passengerSectorQuery) {
+  smartStop(tripId, passengerSectorQuery) {
     const startTime = performance.now();
     const trip = this.trips.find(t => t.id === tripId);
     if (!trip || trip.availableSeats <= 0 || trip.stops.length === 0) {
@@ -187,7 +187,7 @@ class CampusRideSystem {
     const elapsedMs = performance.now() - startTime;
 
     if (elapsedMs > 500) {
-      throw new Error('RNF-06 Violado: Tiempo de respuesta mayor a 500 ms');
+      throw new Error('RNF-06 Vulnerado: Tiempo de respuesta mayor a 500 ms');
     }
 
     return {
