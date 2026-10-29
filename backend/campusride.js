@@ -120,11 +120,34 @@ class CampusRideSystem {
   finishTrip(tripId) {
     const trip = this.trips.find(t => t.id === tripId);
     if (!trip) throw new Error('Viaje no encontrado');
-    // Corrección BUG-02: Bloqueo de finalización sin inicio previo
     if (trip.status !== 'En Curso') {
       throw new Error('No se puede finalizar un viaje que no ha sido iniciado (Botón Finalizar Deshabilitado)');
     }
     trip.status = 'Completado';
     return { status: trip.status, ratingEnabled: true };
+  }
+
+  rateTrip(tripId, passengerEmail, stars, comment = '') {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip || trip.status !== 'Completado') {
+      throw new Error('Solo se pueden calificar viajes en estado Completado');
+    }
+    const existingRating = this.ratings.find(r => r.tripId === tripId && r.passengerEmail === passengerEmail);
+    if (existingRating) {
+      throw new Error('Este viaje ya fue calificado (Modo solo lectura)');
+    }
+    if (stars < 1 || stars > 5) {
+      throw new Error('La calificación debe estar entre 1 y 5 estrellas');
+    }
+    const ratingRecord = {
+      tripId,
+      passengerEmail,
+      stars,
+      comment,
+      status: 'Calificado',
+      readOnly: true
+    };
+    this.ratings.push(ratingRecord);
+    return ratingRecord;
   }
 }
