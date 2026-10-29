@@ -18,6 +18,7 @@ class CampusRideSystem {
     this.users.push(newUser);
     return { message: 'Registro exitoso', user: newUser };
   }
+
   publishRoute({ id, driverEmail, origin, destination, date, departureTime, availableSeats, isFutureTime = true, stops = [] }) {
     if (availableSeats < 1 || availableSeats > 4 || !isFutureTime) {
       throw new Error('Ingrese entre 1 y 4 cupos y un horario futuro');
@@ -51,6 +52,7 @@ class CampusRideSystem {
     }
     return { message: 'OK', trips: results };
   }
+
   getConfirmedPassengers(tripId) {
     const trip = this.trips.find(t => t.id === tripId);
     if (!trip) throw new Error('Viaje no encontrado');
@@ -59,7 +61,6 @@ class CampusRideSystem {
     }
     return { message: 'OK', passengers: trip.confirmedPassengers };
   }
-}
 
   requestSeat(tripId, passengerName, passengerEmail, pickupPoint = 'Origen Principal') {
     const trip = this.trips.find(t => t.id === tripId);
@@ -108,4 +109,22 @@ class CampusRideSystem {
     }
     return { booking, remainingSeats: trip.availableSeats };
   }
-} 
+
+  startTrip(tripId) {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip) throw new Error('Viaje no encontrado');
+    trip.status = 'En Curso';
+    return { status: trip.status, canFinish: true };
+  }
+
+  finishTrip(tripId) {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip) throw new Error('Viaje no encontrado');
+    // Corrección BUG-02: Bloqueo de finalización sin inicio previo
+    if (trip.status !== 'En Curso') {
+      throw new Error('No se puede finalizar un viaje que no ha sido iniciado (Botón Finalizar Deshabilitado)');
+    }
+    trip.status = 'Completado';
+    return { status: trip.status, ratingEnabled: true };
+  }
+}
