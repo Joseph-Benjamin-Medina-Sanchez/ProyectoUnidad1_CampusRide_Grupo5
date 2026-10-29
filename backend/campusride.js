@@ -38,4 +38,18 @@ class CampusRideSystem {
     this.trips.push(newTrip);
     return newTrip;
   }
+
+  searchTrips(origin, destination, date) {
+    const results = this.trips.filter(
+      t => t.status === 'Disponible' &&
+           t.availableSeats > 0 &&
+           t.origin.toLowerCase() === origin.toLowerCase() &&
+           t.destination.toLowerCase() === destination.toLowerCase() &&
+           t.date === date
+    );
+    if (results.length === 0) {
+      return { message: 'No se encontraron viajes disponibles para los criterios seleccionados', trips: [] };
+    }
+    return { message: 'OK', trips: results };
+  }
 }
