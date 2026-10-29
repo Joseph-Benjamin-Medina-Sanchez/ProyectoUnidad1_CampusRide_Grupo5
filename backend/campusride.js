@@ -150,4 +150,29 @@ class CampusRideSystem {
     this.ratings.push(ratingRecord);
     return ratingRecord;
   }
+
+  getUserHistory(userEmail) {
+    const completedOrCancelled = this.trips.filter(
+      t => (t.status === 'Completado' || t.status === 'Cancelado') &&
+           (t.driverEmail === userEmail || t.confirmedPassengers.some(p => p.email === userEmail))
+    );
+    if (completedOrCancelled.length === 0) {
+      return { message: 'Aún no registras viajes en tu historial', history: [] };
+    }
+    const history = completedOrCancelled
+      .slice()
+      .reverse()
+      .map(t => {
+        const ratingObj = this.ratings.find(r => r.tripId === t.id);
+        return {
+          tripId: t.id,
+          date: t.date,
+          route: `${t.origin} -> ${t.destination}`,
+          role: t.driverEmail === userEmail ? 'Conductor' : 'Pasajero',
+          status: t.status,
+          rating: ratingObj ? `${ratingObj.stars}★` : 'Sin calificar'
+        };
+      });
+    return { message: 'OK', history };
+  }
 }
