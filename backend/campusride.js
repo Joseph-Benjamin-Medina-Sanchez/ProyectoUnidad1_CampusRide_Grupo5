@@ -51,4 +51,24 @@ class CampusRideSystem {
     }
     return { message: 'OK', trips: results };
   }
-}
+
+  requestSeat(tripId, passengerName, passengerEmail, pickupPoint = 'Origen Principal') {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip) throw new Error('Viaje no encontrado');
+    if (trip.availableSeats <= 0) {
+      throw new Error('Cupos Agotados');
+    }
+    const booking = {
+      id: `BKG-${this.bookings.length + 1}`,
+      tripId,
+      passengerName,
+      passengerEmail,
+      pickupPoint,
+      status: 'Pendiente', // 'Pendiente', 'Aceptada', 'Rechazada'
+      uiButtonLabel: 'Solicitud Enviada',
+      uiButtonDisabled: true
+    };
+    this.bookings.push(booking);
+    return booking;
+  }
+} 
