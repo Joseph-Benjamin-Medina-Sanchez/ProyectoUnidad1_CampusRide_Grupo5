@@ -1,22 +1,48 @@
-﻿name: CI CampusRide - Grupo 5
+﻿name: CI CampusRide - Integración Continua (Grupo 5)
 
 on:
   push:
-    branches: [ main ]
+    branches: [ main, "feature/**", "fix/**" ]
   pull_request:
     branches: [ main ]
 
 jobs:
-  validate-structure:
+  build-and-test:
+    name: Validación Estructural, Sintaxis y Pruebas (TEST-01 a TEST-11)
     runs-on: ubuntu-latest
+
     steps:
-      - name: 1. Checkout del repositorio
+      - name: 1. Checkout del repositorio CampusRide
         uses: actions/checkout@v4
 
-      - name: 2. Validar directorios obligatorios
+      - name: 2. Configurar entorno Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: 3. Comprobación 1 - Verificar integridad de estructura (/frontend, /backend, /docs)
         run: |
-          test -d frontend
-          test -d backend
-          test -d docs
-          test -f README.md
-          echo "Estructura de directorios verificada correctamente"
+          echo "Verificando estructura obligatoria del repositorio..."
+          test -d frontend || (echo "Error: Falta carpeta /frontend" && exit 1)
+          test -d backend || (echo "Error: Falta carpeta /backend" && exit 1)
+          test -d docs || (echo "Error: Falta carpeta /docs" && exit 1)
+          test -f README.md || (echo "Error: Falta archivo README.md" && exit 1)
+          echo "✅ Estructura de directorios (/frontend, /backend, /docs y README.md) verificada correctamente."
+
+      - name: 4. Comprobación 2 - Validación de sintaxis del código fuente
+        run: |
+          echo "Validando sintaxis de módulos Backend y Frontend..."
+          node --check backend/campusride.js
+          node --check backend/test.js
+          node --check frontend/app.js
+          echo "✅ Sintaxis de JavaScript validada sin errores."
+
+      - name: 5. Comprobación 3 - Ejecutar pruebas automatizadas (Reservas, Cupos y Paradas Inteligentes CR-01)
+        run: |
+          node backend/test.js
+
+git add backend/campusride.js frontend/index.html
+git commit -m "feat(cr01): implementar motor SmartStopSuggestionEngine para paradas inteligentes (RNF-06)"
+
+git add backend/test.js .github/workflows/ci-campusride.yml
+git commit -m "ci(actions): configurar pipeline automatizado y suite TEST-10 y TEST-11 para evolución"
