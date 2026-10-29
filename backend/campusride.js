@@ -60,3 +60,52 @@ class CampusRideSystem {
     return { message: 'OK', passengers: trip.confirmedPassengers };
   }
 }
+
+  requestSeat(tripId, passengerName, passengerEmail, pickupPoint = 'Origen Principal') {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip) throw new Error('Viaje no encontrado');
+    if (trip.availableSeats <= 0) {
+      throw new Error('Cupos Agotados');
+    }
+    const booking = {
+      id: `BKG-${this.bookings.length + 1}`,
+      tripId,
+      passengerName,
+      passengerEmail,
+      pickupPoint,
+      status: 'Pendiente',
+      uiButtonLabel: 'Solicitud Enviada',
+      uiButtonDisabled: true
+    };
+    this.bookings.push(booking);
+    return booking;
+  }
+
+  respondToBooking(bookingId, action) {
+    const booking = this.bookings.find(b => b.id === bookingId);
+    if (!booking) throw new Error('Solicitud no encontrada');
+    const trip = this.trips.find(t => t.id === booking.tripId);
+
+    if (action === 'Aceptar') {
+      if (trip.availableSeats <= 0) {
+        throw new Error('No se puede aceptar la solicitud: Cupos Agotados (0 disponibles)');
+      }
+      booking.status = 'Aceptada';
+      trip.availableSeats -= 1;
+      trip.confirmedPassengers.push({
+        name: booking.passengerName,
+        email: booking.passengerEmail,
+        pickupPoint: booking.pickupPoint,
+        status: 'Confirmado'
+      });
+
+      const matchedStop = trip.stops.find(s => s.name.toLowerCase() === booking.pickupPoint.toLowerCase());
+      if (matchedStop) {
+        matchedStop.passengers.push(booking.passengerName);
+      }
+    } else if (action === 'Rechazar') {
+      booking.status = 'Rechazada';
+    }
+    return { booking, remainingSeats: trip.availableSeats };
+  }
+} 
