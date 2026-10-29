@@ -51,6 +51,15 @@ class CampusRideSystem {
     }
     return { message: 'OK', trips: results };
   }
+  getConfirmedPassengers(tripId) {
+    const trip = this.trips.find(t => t.id === tripId);
+    if (!trip) throw new Error('Viaje no encontrado');
+    if (trip.confirmedPassengers.length === 0) {
+      return { message: 'Aún no tienes pasajeros confirmados para este viaje', passengers: [] };
+    }
+    return { message: 'OK', passengers: trip.confirmedPassengers };
+  }
+}
 
   requestSeat(tripId, passengerName, passengerEmail, pickupPoint = 'Origen Principal') {
     const trip = this.trips.find(t => t.id === tripId);
